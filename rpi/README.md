@@ -6,6 +6,8 @@ We start by placing the Raspberry Pi into gadget mode. Gadget mode allows us to 
 
 ***
 
+## Gadget Mode
+
 First, we need to make some changes to the configuration files on the Raspberry Pi OS. This is best done by plugging the micro-SD drive into your PC and editing the files in the root directory.&#x20;
 
 Start by navigating to and opening `/boot/config.txt` and at the very end add the following: `dtoverlay=dwc2`.
