@@ -55,13 +55,15 @@ Finally, to ssh in to the Raspberry Pi (in gadget mode) from a Windows PC, we ne
 
     ssh -i C:\Users\<username>\.ssh\ssh-private-key user@hostname.local
 
+If it logs in without a password prompt, then the ssh keys are all set.&#x20;
+
 ***
 
 ## Python
 
 All of the coding done for this project used python. Before we begin running scripts on the Raspberry Pi, we need to make sure the environment is set and all the necessary python libraries are installed. This project was completed using python version 3.7.
 
-Most Raspberry Pis come with python installed. Ensure the python3 is installed on the Raspi. In the terminal, run the command `python3 --version`. If it returns with "Python 3.X.X", then python3 is already installed. If not, run:
+Most Raspberry Pis come with python installed. Ensure that python3 is installed on the Raspi. In the terminal, run the command `python3 --version`. If it returns with "Python 3.X.X", then python3 is already installed. If not, run:
 
     sudo apt update
     sudo apt install python3
@@ -74,4 +76,4 @@ Next, we'll install the python libraries that are needed.
 
     pip3 install RPi.GPIO paramiko
 
-The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins. This will be used to interface with the motor driver. The `paramiko` library includes a ssh client that can be built directly into any script. This will be used to execute a script on the Raspberry Pi when we advance the receive antenna after collecting data.&#x20;
+The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins. This will be used to interface with the motor driver. The `paramiko` library includes a ssh client that can be built directly into any script. This will be used to execute a script on the Raspberry Pi when we want to advance the receive antenna after collecting data.&#x20;
