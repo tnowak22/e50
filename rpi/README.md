@@ -16,7 +16,7 @@ Then, edit `/boot/cmdline.txt` and add: `modules-load=dwc2,g_ether` after "rootw
 
 Next, ensure that there is an empty file called `ssh` in the the `/boot/` directory. We have finished making the necessary changes to the OS. We can now replace the micro-SD into the Raspberry Pi and boot it up.&#x20;
 
-If you are connecting from a Windows PC, then the [Bonjour Print Services](https://support.apple.com/kb/DL999?locale=en_US) from Apple are needed to connect the Raspberry Pi via ssh.
+If you are connecting from a Windows PC, then the [Bonjour Print Services](https://support.apple.com/kb/DL999?locale=en_US) from Apple are needed to connect to the Raspberry Pi via ssh.
 
 Finally, we can connect to the Raspberry Pi through ssh from the PC using:
 
@@ -59,7 +59,7 @@ If it logs in without a password prompt, then the ssh keys are all set.&#x20;
 
 ***
 
-## Python
+## Python - Raspi
 
 All of the coding done for this project used python. Before we begin running scripts on the Raspberry Pi, we need to make sure the environment is set and all the necessary python libraries are installed. This project was completed using python version 3.7.
 
@@ -74,6 +74,23 @@ Next, check if pip3 is installed. In the same manner, in the terminal run `pip3 
 
 Next, we'll install the python libraries that are needed.
 
-    pip3 install RPi.GPIO paramiko
+    pip3 install RPi.GPIO
 
-The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins. This will be used to interface with the motor driver. The `paramiko` library includes a ssh client that can be built directly into any script. This will be used to execute a script on the Raspberry Pi when we want to advance the receive antenna after collecting data.&#x20;
+The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins. This will be used to interface with the motor driver.
+
+***
+
+*this could possibly be in its own section/ folder dedicated for setting up the Windows PC*
+
+## Python - Windows PC
+
+In addition, we need to install python on the Windows PC that will be running the VNA software and connecting to the Raspberry Pi. This can be done by navigating to the python organization's [website](https://www.python.org/downloads/windows/) and downloading the desired version. Installing python on Windows should automatically install the pip package manager.
+
+Finally, on the Windows PC, we need to install the `paramiko` python library. This library allows us to initialize a ssh client in any script. This will allow us to automatically log in to the Raspberry Pi and then execute the script that will move the motor after we have collected data.&#x20;
+
+To install the paramiko library, in the command line, run:
+
+    pip3 install paramiko
+
+***
+
