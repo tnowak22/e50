@@ -17,7 +17,7 @@ def move_motor_ccw(steps):
     
     client = SSHClient()                # load the sshclient object
     client.load_system_host_keys()      # load system host keys (may not be necessary when specifying the keyfile)
-    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/TeddysPC")                        # connect to the raspi with the host, user, and ssh private key
+    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/e50")                        # connect to the raspi with the host, user, and ssh private key
     stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
 
     # check for errors
@@ -33,7 +33,7 @@ def move_motor_cw(steps):
     
     client = SSHClient()                # load the sshclient object
     client.load_system_host_keys()      # load system host keys (may not be necessary when specifying the keyfile)
-    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/TeddysPC")                        # connect to the raspi with the host, user, and ssh private key
+    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/e50")                        # connect to the raspi with the host, user, and ssh private key
     stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_cw.py %d' %(steps))      # execute the desired file on the rpi
 
     # check for errors
