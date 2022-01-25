@@ -9,15 +9,32 @@ from paramiko import SSHClient      # import the ssh client package
 # 1. location of file to store the data
 # 2. # of steps to turn the motor
 # 3. experiment number
+# 4. # of antenna locations
 
-def move_motor(steps):
+def move_motor_ccw(steps):
     host = "rcvr.local"                 # hostname of the raspberry pi
     user = "ted"                        # username of the rpi
     
     client = SSHClient()                # load the sshclient object
     client.load_system_host_keys()      # load system host keys (may not be necessary when specifying the keyfile)
-    client.connect(host, username=user, key_filename="C:/path/to/private-key")                             # connect to the raspi with the host, user, and ssh private key
-    stdin, stdout, stderr = client.exec_command('python3 /home/ted/Documents/motor_control.py %d' %(steps))      # execute the desired file on the rpi
+    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/TeddysPC")                        # connect to the raspi with the host, user, and ssh private key
+    stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+
+    # check for errors
+    if stderr.read() == b'':   
+        for line in stdout.readlines():   
+            print(line.strip()) # strip the trailing line breaks   
+    else:   
+        print(stderr.read())
+
+def move_motor_cw(steps):
+    host = "rcvr.local"                 # hostname of the raspberry pi
+    user = "ted"                        # username of the rpi
+    
+    client = SSHClient()                # load the sshclient object
+    client.load_system_host_keys()      # load system host keys (may not be necessary when specifying the keyfile)
+    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/TeddysPC")                        # connect to the raspi with the host, user, and ssh private key
+    stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_cw.py %d' %(steps))      # execute the desired file on the rpi
 
     # check for errors
     if stderr.read() == b'':   
@@ -77,14 +94,14 @@ def process_data(data):
         # converting all the strings in the list to floats
         for i in range(len(num2)):
                 num2[i] = float(num2[i])
-        
+
         # at this point we can work with the data
         processed_data = []
         
         # convert scientific notation to decimal
         # round to 6 decimal places
-        processed_data.append(round(num2[0] * pow(10, num2[1]),6))
-        processed_data.append(round(num2[2] * pow(10, num2[3]),6))
+        processed_data.append(format(num2[0] * pow(10, num2[1]), '.8f'))
+        processed_data.append(format(num2[2] * pow(10, num2[3]), '.8f'))
         return processed_data
 
 def write_data(position, experiment, data):
@@ -124,11 +141,15 @@ def main():
         # write the data to file
         write_data(position, exp_num, final_data)
         # move the motor to the next position
-        move_motor(steps)
+        move_motor_cw(steps)
         # wait for the system to settle
-        time.sleep(5)
+        time.sleep(1)
         # increment the position by 1
         position = position + 1
 
+    # move motor to original position +1 for the next experiment
+    # need to write a function to calculate the number of steps needed to return
+    # to the original position
+    move_motor_ccw(steps)
 if __name__ == "__main__":
     main()
