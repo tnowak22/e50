@@ -19,7 +19,7 @@ global negative
 global y
 
 def move_motor(steps):
-    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/TeddysPC")        # connect to the raspi with the host, user, and ssh private key
+    client.connect(host, username=user, key_filename="C:/path/to/private-key")        # connect to the raspi with the host, user, and ssh private key
     stdin, stdout, stderr = client.exec_command('python3 /home/ted/Documents/motor_control.py %d' %(steps))      # execute the desired file on the rpi
 
     # check for errors
