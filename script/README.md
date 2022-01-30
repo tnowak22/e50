@@ -1,21 +1,13 @@
-The testing branch will serve as the main production branch. The master branch will preserve the original scripts that were used as a proof of concept.
+# README
 
-# Tracking Changes
+## main\_control.py
 
-Changes made:
+This is the main python file that needs to be evoked. Before using this file, ensure that the Raspberry Pi and the Windows client PC are properly set up to communicate and capture data from the Shockline software. It takes in several command line arguments.&#x20;
 
-*   edited the master file; added functions to clean up the script
+### Usage
 
-*   added a script to turn the motor clockwise (in one direction)
+```bash
+python /path/to/main_control.py data_file num_antennae exp_number raspi_user raspi_hostname --raspi_pwd --raspi_key
+```
 
-*   added a script to turn the motor counter clockwise&#x20;
-
-*   created a script that will count the number of steps. this can be used to determine the number of steps for a complete rotation around the track. this will be used to compute the number of steps between txmit and receive antenna locations.
-
-Changes to be made:
-
-*   ~~add a script to turn the motor counter clockwise (in the other direction)~~
-
-*   ~~alter the master script to be able to select the direction of rotation~~
-
-*   determine how to convert number of positions to steps or vice versa
+![title](images\script_help.PNG)
