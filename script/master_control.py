@@ -3,22 +3,32 @@ import sys
 import csv 
 import socket
 import os.path
+import argparse                     # parser for command line arguments
 from paramiko import SSHClient      # import the ssh client package
 
 # this script will take several input arguments
-# 1. location of file to store the data
-# 2. # of steps to turn the motor
-# 3. experiment number
-# 4. # of antenna locations
+# 1. location of file to store the data (data_file)
+# 2. # of antennas (num_antennae)
+# 3. experiment number (exp_number)
+# 4. raspi user (raspi_user)
+# 5. raspi hostname (raspi_hostname)
+# ONE of the following are necessary:
+# 6. raspi password (raspi_pwd) (optional)
+# 7. raspi ssh-key (raspi_key) (optional)
 
-def move_motor_ccw(steps):
-    host = "rcvr.local"                 # hostname of the raspberry pi
-    user = "ted"                        # username of the rpi
-    
+# move the motor in the counter clockwise direction
+def move_motor_ccw(host, user, raspi_key, raspi_pwd, steps):
+    # establish the SSHClient so we can login & execute a script on the raspberry pi
     client = SSHClient()                # load the sshclient object
     client.load_system_host_keys()      # load system host keys (this is necessary to load the known-hosts file)
-    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/e50")                        # connect to the raspi with the host, user, and ssh private key
-    stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+
+    # check which authentication method is used, use the appropriate one
+    if (raspi_key == 'empty'):
+        client.connect(host, username=user, password=raspi_pwd)                  # connect to the raspi with the host, user, and ssh private key
+        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+    else:
+        client.connect(host, username=user, key_filename=raspi_key)                   # connect to the raspi with the host, user, and ssh private key
+        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
 
     # check for errors
     if stderr.read() == b'':   
@@ -27,21 +37,55 @@ def move_motor_ccw(steps):
     else:   
         print(stderr.read())
 
-def move_motor_cw(steps):
-    host = "rcvr.local"                 # hostname of the raspberry pi
-    user = "ted"                        # username of the rpi
-    
+# move the motor clockwise
+def move_motor_cw(host, user, raspi_key, raspi_pwd, steps):
+    # establish the sshclient to connect to the raspberry pi
     client = SSHClient()                # load the sshclient object
     client.load_system_host_keys()      # load system host keys (may not be necessary when specifying the keyfile)
-    client.connect(host, username=user, key_filename="C:/Users/nowak/.ssh/e50")                        # connect to the raspi with the host, user, and ssh private key
-    stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_cw.py %d' %(steps))      # execute the desired file on the rpi
-
+    
+    #check which authentication method was used
+    if (raspi_key == 'empty'):
+        client.connect(host, username=user, password=raspi_pwd)                        # connect to the raspi with the host, user, and ssh private key
+        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_cw.py %d' %(steps))      # execute the desired file on the rpi
+    else :
+        client.connect(host, username=user, key_filename=raspi_key)                        # connect to the raspi with the host, user, and ssh private key
+        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+    
     # check for errors
     if stderr.read() == b'':   
         for line in stdout.readlines():   
             print(line.strip()) # strip the trailing line breaks   
     else:   
         print(stderr.read())  
+
+def get_args():
+    # get the command line arguments that are passed to the script
+    # the arguments WITHOUT double hyphens are positional and are REQUIRED (and be passed in the order listed)
+    # the arguments WITH double hyphens are optional (but ONE of the two is required)
+    parser = argparse.ArgumentParser(description="Lets collect some data, shall we?")
+    parser.add_argument('data_file', help='Location of the file that will store data.')
+    parser.add_argument('num_antennae', help='The number of tx/rx antenna locations.')
+    parser.add_argument('exp_number', help='The iteration number or the experiment number.')
+    parser.add_argument('rpi_user', help='Login username for the raspberry pi.')
+    parser.add_argument('rpi_hostname', help='Hostname of the raspberry pi.')
+    parser.add_argument('--rpi_pwd', help='Login password for the provided user of the raspberry pi.', default='empty')
+    parser.add_argument('--ssh_key', help='Alternatively, login using a private ssh-key. Note: the public key must be properly stored on the raspberry pi.', default='empty')
+
+    args = parser.parse_args()
+
+    data_file = args.data_file
+    num_antennae = args.num_antennae
+    exp_number = args.exp_number
+    raspi_user = args.rpi_user
+    raspi_hostname = args.rpi_hostname
+    raspi_pwd = args.rpi_pwd
+    raspi_key = args.ssh_key
+
+    # ensure that one of the authentication methods is passed
+    if ((raspi_pwd == 'empty') and (raspi_key == 'empty')):
+        print("Error: No credentials have been passed. Please either enter the raspberry pi user's password or supply an ssh-key.")
+    else:
+        return data_file, num_antennae, exp_number, raspi_user, raspi_hostname, raspi_pwd, raspi_key
 
 def init_vna():
     # Initialize the connection with the shockline software
@@ -54,7 +98,9 @@ def init_vna():
     vna.send(str.encode(":CALC1:PAR3:FORM REIM\n"))
     vna.send(str.encode(":CALC1:PAR3:MARK1:X 4E9\n"))
 
-def does_file_exist():
+def does_file_exist(data_file):
+    # check if the supplied data file exists
+    # if it doesnt exist, create it and initialize the data to be stored
     if os.path.isfile(data_file) == True:
         print('The specified file already exists. Continuing...')
     else:
@@ -65,6 +111,8 @@ def does_file_exist():
             header.writerow(['Position', 'Experiment', 'Real & Imag Field'])
 
 def get_vna_data():
+        # get data from the vna
+        # to obtain different data modify this function
         vna.send(str.encode(":CALC1:PAR3:MARK1:Y?\n"))
         data = vna.recv(2056)
         return data
@@ -104,7 +152,7 @@ def process_data(data):
         processed_data.append(format(num2[2] * pow(10, num2[3]), '.8f'))
         return processed_data
 
-def write_data(position, experiment, data):
+def write_data(data_file, position, experiment, data):
     # now we can write the data to the created csv file
     with open(data_file, 'a', newline='') as f:
         data_in = csv.writer(f, delimiter='\t')     # we need to initialize the object that writes data
@@ -114,34 +162,42 @@ def write_data(position, experiment, data):
         time.sleep(1)
 
 def main():
-    global data_file
-    global steps
-    global exp_num
-    global num_positions
-    # input arguments:
-    data_file = sys.argv[1]
-    steps = int(sys.argv[2])
-    exp_num = int(sys.argv[3])
-    num_positions = int(sys.argv[4])
+    # get the input arguments:
+    arguments = get_args()
+    data_file = arguments[0]
+    num_antennae = arguments[1]
+    exp_number = arguments[2]
+    raspi_user = arguments[3]
+    raspi_hostname = arguments[4]
+    raspi_pwd = arguments[5]
+    raspi_key = arguments[6]
+
+    # need a function to calculate the number of steps
+    # based on the number of antenna locations
+    steps_forward = 10
+    steps_reverse = 10
 
     # first check if the data file exists
-    does_file_exist()
+    does_file_exist(data_file)
 
     # initialize the vna
     init_vna()
 
     # we'll loop over the number of positions (# of receive antenna locations)
     # collect data, process, save to file, move motor, repeat
+    # the number of times the motor will move forward will be the number of antenna locations - 2
     position = 0
+    num_positions = num_antennae - 2
+
     for i in range(0, num_positions, 1):
         # get the data from vna
         data = get_vna_data()
         # process the data
         final_data = process_data(data)
         # write the data to file
-        write_data(position, exp_num, final_data)
+        write_data(data_file, position, exp_number, final_data)
         # move the motor to the next position
-        move_motor_cw(steps)
+        move_motor_cw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_forward)
         # wait for the system to settle
         time.sleep(1)
         # increment the position by 1
@@ -150,6 +206,7 @@ def main():
     # move motor to original position +1 for the next experiment
     # need to write a function to calculate the number of steps needed to return
     # to the original position
-    move_motor_ccw(steps)
+    move_motor_ccw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_reverse)
+
 if __name__ == "__main__":
     main()
