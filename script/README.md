@@ -10,4 +10,4 @@ This is the main python file that needs to be evoked. Before using this file, en
 python /path/to/main_control.py data_file num_antennae exp_number raspi_user raspi_hostname --raspi_pwd --raspi_key
 ```
 
-![Screenshot](images\script_help.PNG)
+![Screenshot](script\images\script_help.PNG)
