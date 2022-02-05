@@ -32,10 +32,10 @@ where "myvenv" can be altered as desired.
 
 Now, we need to activate the environment before we begin installing packages. This can be done using,
 
-    source /path/to/myvenv
+    source /path/to/myvenv/bin/activate
 
     # for example
-    source /home/ted/myvenv
+    source /home/ted/myvenv/bin/activate
 
 You will notice that the environment name will be shown in parantheses next to the user and hostname in the terminal window. To deactivate, simply run `deactivate`. The terminal will look something like this:
 
