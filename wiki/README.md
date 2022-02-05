@@ -8,9 +8,6 @@ This wiki contains the documentation for setting up the software side of the pro
 
 3.  Clone the github repository onto that same PC
 
-4.  Set up the python environment on the PC ([see here](https://github.com/tnowak22/e50/python_pc.md))
+4.  Set up the python environment on the PC ([see here](script/README.md))
 
 5.  Run the python script according to the usage page ([see here](https://github.com/tnowak22/e50/script/README.md))
-
-
-
