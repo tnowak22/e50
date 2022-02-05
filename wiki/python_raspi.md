@@ -55,7 +55,7 @@ The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi
 
 ## Running the script
 
-Now, when we run the script we need to call the python binaries from the environment that we created. All we have to do is call python from the folder where we created the environment. For example,
+Now, when we run the script we need to call the python binaries from the environment that we created. All we have to do is call python from the folder where we created the environment. Refer to the main_control.py script in this project to see how the motor control python scripts were executed. The following is an example of executing a python script with a specific environment:
 
     /path/to/venv/bin/python3 /path/to/script_file.py
 
