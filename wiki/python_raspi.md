@@ -39,7 +39,7 @@ Now, we need to activate the environment before we begin installing packages. Th
 
 You will notice that the environment name will be shown in parantheses next to the user and hostname in the terminal window. To deactivate, simply run `deactivate`. The terminal will look something like this:
 
-![](./images/activate.png)
+![](./images/activate.PNG)
 
 ***
 
