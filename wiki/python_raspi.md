@@ -39,7 +39,7 @@ Now, we need to activate the environment before we begin installing packages. Th
 
 You will notice that the environment name will be shown in parantheses next to the user and hostname in the terminal window. To deactivate, simply run `deactivate`. The terminal will look something like this:
 
-![](/images/activate.png)
+![](./images/activate.png)
 
 ***
 
@@ -62,4 +62,4 @@ Now, when we run the script we need to call the python binaries from the environ
     # following the previous examples
     /home/ted/myvenv/bin/python3 /path/to/script_file.py
 
-This concludes the set up needed for python on the Raspberry Pi. 
+This concludes the set up needed for python on the Raspberry Pi.

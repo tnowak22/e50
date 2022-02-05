@@ -96,7 +96,7 @@ def init_vna():
 
     # Set the desired trace parameters
     vna.send(str.encode(":CALC1:PAR3:FORM REIM\n"))
-    vna.send(str.encode(":CALC1:PAR3:MARK1:X 4E9\n"))
+    vna.send(str.encode(":CALC1:PAR3:MARK1:X 3E9\n"))
 
 def does_file_exist(data_file):
     # check if the supplied data file exists
@@ -165,8 +165,8 @@ def main():
     # get the input arguments:
     arguments = get_args()
     data_file = arguments[0]
-    num_antennae = arguments[1]
-    exp_number = arguments[2]
+    num_antennae = int(arguments[1])
+    exp_number = int(arguments[2])
     raspi_user = arguments[3]
     raspi_hostname = arguments[4]
     raspi_pwd = arguments[5]
@@ -174,8 +174,8 @@ def main():
 
     # need a function to calculate the number of steps
     # based on the number of antenna locations
-    steps_forward = 10
-    steps_reverse = 10
+    steps_forward = 1000
+    steps_reverse = 1000
 
     # first check if the data file exists
     does_file_exist(data_file)
