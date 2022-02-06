@@ -23,6 +23,7 @@ Next, ensure that there is an empty file called `ssh` in the the `/boot/` direct
 We have finished making the necessary changes to the OS. We can now replace the micro-SD into the Raspberry Pi and boot it up.&#x20;
 
 ***
+## Connecting Through Windows
 
 If you are connecting from a Windows PC, then the [Bonjour Print Services](https://support.apple.com/kb/DL999?locale=en_US) from Apple are needed to connect to the Raspberry Pi via ssh.
 
