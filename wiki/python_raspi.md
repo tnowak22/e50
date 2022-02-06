@@ -47,10 +47,12 @@ You will notice that the environment name will be shown in parantheses next to t
 
 Once the environment is activated, we can install the necessary libraries. For this project, we only need the `RPi.GPIO` library. It can be installed using:
 
+    pip3 install wheel
     pip3 install RPi.GPIO
 
-The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins. This will be used to interface with the motor driver.
+The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins.
 
+***
 NOTE: There seems to be a bug with Python version 3.9.2 and installing the RPi.GPIO package. It can be remedied by running `export CFLAGS=-fcommon` in the terminal before installing the RPi.GPIO library. An image is included of a successfull installation.
 
 ![](./images/error.PNG)
