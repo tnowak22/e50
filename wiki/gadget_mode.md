@@ -25,7 +25,7 @@ We have finished making the necessary changes to the OS. We can now replace the 
 ***
 ## Connecting Through Windows
 
-If you are connecting from a Windows PC, then the [Bonjour Print Services](https://support.apple.com/kb/DL999?locale=en_US) from Apple are needed to connect to the Raspberry Pi via ssh.
+If you are connecting from a Windows PC, then the [Bonjour Print Services](https://support.apple.com/kb/DL999?locale=en_US) from Apple are needed to connect to the Raspberry Pi via ssh. Install and reboot your PC for the changes to take effect.
 
 Finally, we can connect to the Raspberry Pi through ssh from the PC using:
 
