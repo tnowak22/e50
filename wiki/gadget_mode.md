@@ -2,11 +2,11 @@
 
 First, we need to make some changes to the configuration files on the Raspberry Pi OS. This is best done by plugging the micro-SD drive into your PC and editing the files in the boot directory. The following image shows the boot directory in the Windows file explorer.&#x20;
 
-![](./images/boot_dir.PNG)
+![](./images/filesystem.PNG)
 
 When you enter the boot directory, it will look something like this:
 
-![](./images/filesystem.PNG)
+![](./images/boot_dir.PNG)
 
 Start by navigating to and opening `/boot/config.txt` and at the very end add the following: `dtoverlay=dwc2`. It should look something like this:
 
