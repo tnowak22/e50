@@ -1,6 +1,6 @@
 # Installing Raspian OS
 
-When starting this project, there was a new release of the Raspian OS, which ran Python 3.9.2. I encountered an error when installing the RPi.GPIO package in this version. Therefore, I installed an older version of Raspian OS that ships with **Python 3.7.3** and was known to be stable.&#x20;
+When starting this project, there was a new release of the Raspian OS (bullseye), which ran Python 3.9.2. I encountered an error when installing the RPi.GPIO package in this version. Therefore, I installed an older version of Raspian OS that ships with **Python 3.7.3** and was known to be stable. However, there is a solution to the problem. See the *note* in [Setting up Python on the Raspberry Pi](./python_raspi.md) section. Again, either version of Raspian OS (bullseye or buster) should work, but we only tested this project on buster using Python version 3.7.3.
 
 To install Raspian OS, I recommend using the Raspberry Pi Imager (link here). However, we need to find the older version of Raspian OS. This is located in the Raspberry Pi Foundation's archives [here](https://downloads.raspberrypi.org/raspbian_lite/images/). The version that was used in this project is the [`raspbian_lite-2020-02-14`](https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2020-02-14/). Download and extract the file.&#x20;
 
