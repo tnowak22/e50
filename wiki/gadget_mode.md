@@ -10,7 +10,7 @@ When you enter the boot directory, it will look something like this:
 
 Start by navigating to and opening `/boot/config.txt` and at the very end add the following: `dtoverlay=dwc2`. It should look something like this:
 
-![](./images/dt.PNG)
+![](./images/config.PNG)
 
 Then, edit `/boot/cmdline.txt` and add: `modules-load=dwc2,g_ether` after "rootwait." This file is particular about formatting and spacing, so take caution when editing this file. The contents of the file should all be on a single line with a single space between each option listed, as shown below.
 
