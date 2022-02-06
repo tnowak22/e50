@@ -1,11 +1,11 @@
 # Setting up Python on the Raspberry Pi
 
-All of the coding done for this project used python. Before we begin running scripts on the Raspberry Pi, we need to make sure the environment is set and all the necessary python libraries are installed. The Raspberry Pi ran python version 3.7.2, which was the latest version packaged in the Raspberry Pi operating system.&#x20;
+All of the coding done for this project used python. Before we begin running scripts on the Raspberry Pi, we need to make sure the environment is set and all the necessary python libraries are installed. The Raspberry Pi ran **python version 3.9.2**.
 
-Most Raspberry Pis come with python installed. Ensure that python3 is installed on the Raspi. In the terminal, run the command `python3 --version`. If it returns with "Python 3.X.X", then python3 is already installed. If not, run:
+Most Raspberry Pis come with python installed. Ensure that python3 is installed on the Raspi. In the terminal, run the command `python3 --version`. If it returns with "Python 3.X.X", then python3 is already installed. We also need to install the `python3-dev` and `python3-venv` packages. All three can be installed using the following commands.
 
     sudo apt update
-    sudo apt install python3
+    sudo apt install python3 python3-dev
 
 Next, check if pip3 is installed. In the same manner, in the terminal run `pip3 --version`. If it returns with a version number, then it is installed. If not, run:
 
@@ -51,11 +51,15 @@ Once the environment is activated, we can install the necessary libraries. For t
 
 The `RPi.GPIO` library will allow us to control the motor using the Raspberry Pi's general purpose input output pins. This will be used to interface with the motor driver.
 
+NOTE: There seems to be a bug with Python version 3.9.2 and installing the RPi.GPIO package. It can be remedied by running `export CFLAGS=-fcommon` in the terminal before installing the RPi.GPIO library. An image is included of a successfull installation.
+
+![](./images/error.PNG)
+
 ***
 
 ## Running the script
 
-Now, when we run the script we need to call the python binaries from the environment that we created. All we have to do is call python from the folder where we created the environment. Refer to the main_control.py script in this project to see how the motor control python scripts were executed. The following is an example of executing a python script with a specific environment:
+Now, when we run the script we need to call the python binaries from the environment that we created. All we have to do is call python from the folder where we created the environment. Refer to the main\_control.py script in this project to see how the motor control python scripts were executed. The following is an example of executing a python script with a specific environment:
 
     /path/to/venv/bin/python3 /path/to/script_file.py
 
