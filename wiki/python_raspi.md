@@ -1,6 +1,6 @@
 # Setting up Python on the Raspberry Pi
 
-All of the coding done for this project used python. Before we begin running scripts on the Raspberry Pi, we need to make sure the environment is set and all the necessary python libraries are installed. The Raspberry Pi ran **python version 3.9.2**.
+All of the coding done for this project used python. Before we begin running scripts on the Raspberry Pi, we need to make sure the environment is set and all the necessary python libraries are installed. The Raspberry Pi ran **python version 3.7.3**.
 
 Most Raspberry Pis come with python installed. Ensure that python3 is installed on the Raspi. In the terminal, run the command `python3 --version`. If it returns with "Python 3.X.X", then python3 is already installed. We also need to install the `python3-dev` and `python3-venv` packages. All three can be installed using the following commands.
 
