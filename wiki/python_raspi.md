@@ -59,6 +59,17 @@ NOTE: There seems to be a bug with Python version 3.9.2 and installing the RPi.G
 
 ***
 
+## Setting Permissions
+
+Once we've installed the RPi.GPIO package, we need to add our user to the gpio group. This will allow the user to access the gpio pins without needing elevated privileges. To add the user to the gpio group, run the following:
+
+    sudo usermod -aG gpio username
+
+    # for example
+    sudo usermod -aG gpio ted
+
+***
+
 ## Running the script
 
 Now, when we run the script we need to call the python binaries from the environment that we created. All we have to do is call python from the folder where we created the environment. Refer to the main\_control.py script in this project to see how the motor control python scripts were executed. The following is an example of executing a python script with a specific environment:
