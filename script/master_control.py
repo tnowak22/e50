@@ -25,10 +25,10 @@ def move_motor_ccw(host, user, raspi_key, raspi_pwd, steps):
     # check which authentication method is used, use the appropriate one
     if (raspi_key == 'empty'):
         client.connect(host, username=user, password=raspi_pwd)                  # connect to the raspi with the host, user, and ssh private key
-        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+        stdin, stdout, stderr = client.exec_command('/home/yagi/venv/bin/python3 /home/yagi/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
     else:
         client.connect(host, username=user, key_filename=raspi_key)                   # connect to the raspi with the host, user, and ssh private key
-        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+        stdin, stdout, stderr = client.exec_command('/home/yagi/venv/bin/python3 /home/yagi/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
 
     # check for errors
     if stderr.read() == b'':   
@@ -46,10 +46,10 @@ def move_motor_cw(host, user, raspi_key, raspi_pwd, steps):
     #check which authentication method was used
     if (raspi_key == 'empty'):
         client.connect(host, username=user, password=raspi_pwd)                        # connect to the raspi with the host, user, and ssh private key
-        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_cw.py %d' %(steps))      # execute the desired file on the rpi
+        stdin, stdout, stderr = client.exec_command('/home/yagi/venv/bin/python3 /home/yagi/motor/motor_cw.py %d' %(steps))      # execute the desired file on the rpi
     else :
         client.connect(host, username=user, key_filename=raspi_key)                        # connect to the raspi with the host, user, and ssh private key
-        stdin, stdout, stderr = client.exec_command('/home/ted/venv/bin/python3 /home/ted/Documents/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
+        stdin, stdout, stderr = client.exec_command('/home/yagi/venv/bin/python3 /home/yagi/motor/motor_ccw.py %d' %(steps))      # execute the desired file on the rpi
     
     # check for errors
     if stderr.read() == b'':   
@@ -62,7 +62,7 @@ def get_args():
     # get the command line arguments that are passed to the script
     # the arguments WITHOUT double hyphens are positional and are REQUIRED (and be passed in the order listed)
     # the arguments WITH double hyphens are optional (but ONE of the two is required)
-    parser = argparse.ArgumentParser(description="Lets collect some data, shall we?")
+    parser = argparse.ArgumentParser(description="Lets collect some data, shall we? Visit https://github.com/tnowak22/e50 to find more specific instructions regarding usage and an overview of the project, project files, and other pertinent information.")
     parser.add_argument('data_file', help='Location of the file that will store data.')
     parser.add_argument('num_antennae', help='The number of tx/rx antenna locations.')
     parser.add_argument('exp_number', help='The iteration number or the experiment number.')
@@ -161,6 +161,21 @@ def write_data(data_file, position, experiment, data):
         data_in.writerow([position, experiment, data])
         time.sleep(1)
 
+def steps_forward(num_antennae):
+    num_positions = num_antennae
+    steps_for_full_rotation = 29700
+
+    steps_increment = steps_for_full_rotation / num_positions
+    return steps_increment
+
+def steps_reverse(num_antennae):
+    num_positions = num_antennae
+    steps_for_full_rotation = 29700
+
+    steps_increment = steps_for_full_rotation / num_positions
+    steps_to_return_to_start = steps_for_full_rotation - (steps_increment * 3)
+    return steps_to_return_to_start
+
 def main():
     # get the input arguments:
     arguments = get_args()
@@ -172,10 +187,12 @@ def main():
     raspi_pwd = arguments[5]
     raspi_key = arguments[6]
 
-    # need a function to calculate the number of steps
-    # based on the number of antenna locations
-    steps_forward = 1000
-    steps_reverse = 1000
+    # calculate the number of steps needed based on 
+    # the number of antenna locations
+    # note that we calibrated the system to determine how many steps were needed
+    # for one full rotaion. this is hard coded in the two functions below
+    steps_forw = steps_forward(num_antennae)
+    steps_rev = steps_reverse(num_antennae)
 
     # first check if the data file exists
     does_file_exist(data_file)
@@ -197,7 +214,7 @@ def main():
         # write the data to file
         write_data(data_file, position, exp_number, final_data)
         # move the motor to the next position
-        move_motor_cw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_forward)
+        move_motor_cw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_forw)
         # wait for the system to settle
         time.sleep(1)
         # increment the position by 1
@@ -206,7 +223,7 @@ def main():
     # move motor to original position +1 for the next experiment
     # need to write a function to calculate the number of steps needed to return
     # to the original position
-    move_motor_ccw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_reverse)
+    move_motor_ccw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_rev)
 
 if __name__ == "__main__":
     main()
