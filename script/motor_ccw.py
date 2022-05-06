@@ -84,10 +84,10 @@ def move_motor_ccw(steps):
                     time.sleep(0.001)
                     #time.sleep(1)
                 i=i-1
-            print('Motor moved the desired number of steps.')
+            #print('Motor moved the desired number of steps.')
             break       # once the for loop is completed break from the infinite while loop
         GPIO.cleanup()
-        print('Motor in position.')
+        print('Motor in position.\n')
        
     except KeyboardInterrupt:
         GPIO.cleanup()

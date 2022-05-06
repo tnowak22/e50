@@ -3,6 +3,7 @@ import sys
 import csv 
 import socket
 import os.path
+import pyfiglet
 import argparse                     # parser for command line arguments
 from paramiko import SSHClient      # import the ssh client package
 
@@ -186,6 +187,12 @@ def main():
     raspi_hostname = arguments[4]
     raspi_pwd = arguments[5]
     raspi_key = arguments[6]
+
+    # print the banner
+    banner = pyfiglet.figlet_format("Scattered Field Measurement", font = "doom", width=100 )
+    print(banner)
+    print("Courtesy Senior Design Team E50. Marquette University 2021-2022.\n\n")
+    print("The main_control.py script is now running. To EXIT, press CTRL+C.\n\n")
 
     # calculate the number of steps needed based on 
     # the number of antenna locations
