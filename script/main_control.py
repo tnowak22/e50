@@ -96,8 +96,16 @@ def init_vna():
     vna.connect(("127.0.0.1", 5001))
 
     # Set the desired trace parameters
-    vna.send(str.encode(":CALC1:PAR3:FORM REIM\n"))
-    vna.send(str.encode(":CALC1:PAR3:MARK1:X 3E9\n"))
+    # S21
+    # vna.send(str.encode(":CALC1:PAR3:FORM REIM\n"))
+    # vna.send(str.encode(":CALC1:PAR3:MARK1:X 3E9\n"))
+    # S12 - initialize and set mark
+    vna.send(str.encode(":CALC1:PAR2:FORM REIM\n"))
+    vna.send(str.encode(":CALC1:PAR2:MARK1:X 3E9\n"))  
+    # S11 - initialize & set mark
+    vna.send(str.encode(":CALC1:PAR1:MARK1:X 3E9\n"))
+    # S22 - initialize & set mark
+    vna.send(str.encode(":CALC1:PAR4:MARK1:X 3E9\n"))
 
 def does_file_exist(data_file):
     # check if the supplied data file exists
@@ -109,57 +117,62 @@ def does_file_exist(data_file):
         with open(data_file, 'w', newline='') as newFile:
             # after creating the file, we want to initialize the variables that will be stored
             header = csv.writer(newFile, delimiter='\t')
-            header.writerow(['Position', 'Experiment', 'Real & Imag Field'])
+            header.writerow(['Position', 'Experiment','S11 - LogMag' ,'S22 - LogMag' ,'S12 - Real', 'S12 - Imag'])
 
 def get_vna_data():
-        # get data from the vna
-        # to obtain different data modify this function
-        vna.send(str.encode(":CALC1:PAR3:MARK1:Y?\n"))
-        data = vna.recv(2056)
-        return data
+    # get data from the vna
+    # to obtain different data modify this function
+    # vna.send(str.encode(":CALC1:PAR3:MARK1:Y?\n"))
+    # data = vna.recv(2056)
+
+    # get s11 data (refl. coeff of transmit)
+    vna.send(str.encode(":CALC1:PAR1:MARK1:Y?\n"))
+    s11 = vna.recv(2056)
+    # get s12 data (out at 1 in at 2) - total field
+    vna.send(str.encode(":CALC1:PAR2:MARK1:Y?\n"))
+    s12 = vna.recv(2056)
+    # get s22 data (refl. coeff of receive)
+    vna.send(str.encode(":CALC1:PAR4:MARK1:Y?\n"))
+    s22 = vna.recv(2056)
+    return s11.decode(), s12.decode(), s22.decode()
 
 def process_data(data):
-        # this function is responsible for processing the data into a usable format
-        string = data.decode("utf-8")
-        string = string.strip()
-        
-        split = string.split("\\")    # remove the leading B
-        split2 = split[0].split(',')   # split the items by the backslashes
-        
-        num = []
-        
-        # ***** we can keep it in scientific notation ******
-        # now we need to split the 'E' from the real/imaginary parts
-        for i in range(len(split2)):
-            num.append(split2[i].split("E"))
-            
-        num2 = []
-        
-        # creating a new list to remove the nested list
-        for i in range(0, len(num)):
-            for j in range(0, len(num[i])):
-                num2.append(num[i][j])
-        
-        # converting all the strings in the list to floats
-        for i in range(len(num2)):
-                num2[i] = float(num2[i])
+    s11, s12, s22 = data
+    # print(s11)
+    # print(s22)
+    # print(s21)
+    # AT THIS POINT WE HAVE WHAT WE NEED, THE REST IS AESTHETIC... #
 
-        # at this point we can work with the data
-        processed_data = []
-        
-        # convert scientific notation to decimal
-        # round to 6 decimal places
-        processed_data.append(format(num2[0] * pow(10, num2[1]), '.8f'))
-        processed_data.append(format(num2[2] * pow(10, num2[3]), '.8f'))
-        return processed_data
+    s11_a, s11_b = s11.split('E')
+    s22_a, s22_b = s22.split('E')
+
+    # split s12 into real and imag
+    real, imag = s12.split(',')
+
+    # convert everything to floats
+    s11_a = float(s11_a)
+    s11_b = float(s11_b[3])
+    s22_a = float(s22_a)
+    s22_b = float(s22_b[3])
+    real = float(real)
+    imag = float(imag)
+
+    final_data = []
+    # convert scientific notation to decimal
+    final_data.append(format(s11_a * pow(10, s11_b), '.8f'))
+    final_data.append(format(s22_a * pow(10, s22_b), '.8f'))
+    final_data.append(real)
+    final_data.append(imag)
+
+    return final_data
 
 def write_data(data_file, position, experiment, data):
     # now we can write the data to the created csv file
     with open(data_file, 'a', newline='') as f:
         data_in = csv.writer(f, delimiter='\t')     # we need to initialize the object that writes data
-       
+        s11, s22, s12_real, s12_imag = data
         # now we append this data to the csv file
-        data_in.writerow([position, experiment, data])
+        data_in.writerow([position, experiment, s11, s22, s12_real, s12_imag])
         time.sleep(1)
 
 def steps_forward(num_antennae):
@@ -221,16 +234,16 @@ def main():
         # write the data to file
         write_data(data_file, position, exp_number, final_data)
         # move the motor to the next position
-        move_motor_cw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_forw)
+        move_motor_ccw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_forw)
         # wait for the system to settle
-        time.sleep(1)
+        time.sleep(3)
         # increment the position by 1
         position = position + 1
 
     # move motor to original position +1 for the next experiment
     # need to write a function to calculate the number of steps needed to return
     # to the original position
-    move_motor_ccw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_rev)
+    move_motor_cw(raspi_hostname, raspi_user, raspi_key, raspi_pwd, steps_rev)
 
 if __name__ == "__main__":
     main()
