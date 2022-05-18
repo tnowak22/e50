@@ -33,6 +33,18 @@ This will download all of the wiki pages as _.md_ files, which can then be acces
 
 ***
 
+## Python Scripts 
+
 The python script files that you are probably looking for will be found in the `script` folder above.
 
 ***
+
+## CAD Files
+
+The CAD files that were used to construct the rack and pinion track can be found in the `CAD` folder above.
+
+***
+
+## Wiki Images
+
+Don't let the name fool you. The `wiki` folder that you see in the directory tree only contains relevant images used throughout the wiki pages. To see the actual wiki pages, locate the _Wiki_ button in the header near _Projects_ and _Security_. Alternatively, click [here](https://github.com/tnowak22/e50/wiki) to go to the wiki page.
