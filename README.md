@@ -29,3 +29,25 @@ The files that are present in this repository are as follows:
 *   motor\_original.py
 
     &#x20;   This was the original motor control python script from which motor\_cw.py and motor\_ccw.py originated. This was kept as a backup.&#x20;
+
+***
+
+## Cloning the Repository
+
+If you are unfamiliar with git and git clone, the repository can be downloaded by navigating to the `Code` button above and hitting the _Download ZIP_ option. This downloads an archive of the repository and has the same effect as running a `git clone`.
+
+![](https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo.png)
+
+![](https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo2.png)
+
+To use git to download the repository, run
+
+```
+git clone https://github.com/tnowak22/e50
+```
+
+To clone the wiki pages, run
+
+```
+git clone https://github.com/tnowak22/e50.wiki.git
+```
