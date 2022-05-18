@@ -38,7 +38,9 @@ If you are unfamiliar with git and git clone, the repository can be downloaded b
 
 ![](https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo.png)
 
-![](https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo2.png)
+<p align="center">
+  <img src="https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo2.png">
+</p>
 
 To use git to download the repository, run
 
@@ -51,3 +53,4 @@ To clone the wiki pages, run
 ```
 git clone https://github.com/tnowak22/e50.wiki.git
 ```
+This will download all of the wiki pages as _.md_ files, which can then be accessed using your preferred document viewer.
