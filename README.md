@@ -35,6 +35,8 @@ git clone https://github.com/tnowak22/e50.wiki.git
 ```
 This will download all of the wiki pages as _.md_ files, which can then be accessed using your preferred document viewer.
 
+NOTE: When cloning the repository's wiki pages, images will most likely not be visible. The links to images will be available in the _.md_ files and will have to be accessed through a browser.
+
 ***
 
 ## Python Scripts 
