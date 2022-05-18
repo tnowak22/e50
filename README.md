@@ -10,6 +10,8 @@ Refer to the wiki for additional information and guides.
 
 ## Cloning the Repository
 
+### Downloading an Archive
+
 If you are unfamiliar with git and git clone, the repository can be downloaded by navigating to the `Code` button above and hitting the _Download ZIP_ option. This downloads an archive of the repository and has the same effect as running a `git clone`.
 
 ![](https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo.png)
@@ -17,6 +19,8 @@ If you are unfamiliar with git and git clone, the repository can be downloaded b
 <p align="center">
   <img src="https://github.com/tnowak22/e50/blob/main/wiki/images/clone_repo2.png">
 </p>
+
+### Using Git Clone 
 
 To use git to download the repository, run
 
